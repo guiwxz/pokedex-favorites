@@ -18,9 +18,11 @@ import { colorPalette } from "../../config/colorPalette";
 import { FavoritesType } from "../../store/favorites/favorites.types";
 import { useNavigate } from "react-router";
 import Button from "../../components/Button";
+import { useLocalStorage } from "../../store/favorites/useLocalStorage";
 
 export const PokeList: React.FC<React.PropsWithChildren> = () => {
   const { fetchPokemons, pokemons, page, setPage } = usePokemons();
+  const { favorites } = useLocalStorage();
 
   const navigate = useNavigate();
 
@@ -41,10 +43,11 @@ export const PokeList: React.FC<React.PropsWithChildren> = () => {
 
   React.useEffect(() => {
     if (activeTab === "favoritos") {
-      setPage(0);
+      setPage && setPage(0);
     }
-    fetchPokemons({ onlyFavorites: activeTab === "favoritos" });
-  }, [activeTab, setActiveTab, page, setPage]);
+    fetchPokemons &&
+      fetchPokemons({ onlyFavorites: activeTab === "favoritos" });
+  }, [favorites, fetchPokemons, activeTab, setActiveTab, page, setPage]);
 
   const hasContentToLoad = React.useMemo(() => {
     if (pokemons && page * 20 > pokemons.count) {
