@@ -64,87 +64,101 @@ export const PokeList: React.FC<React.PropsWithChildren> = () => {
       </HomeButton>
 
       <Container>
-        <ListTab>
-          <div style={{ color: `${colorPalette.primary[300]}` }}>
-            {pokemons && pokemons.count} pokémons encontrados
-          </div>
-          <TabContent>
-            <TabItem
-              active={activeTab === "favoritos"}
-              onClick={() => setActiveTab("favoritos")}
-            >
-              <TabItemLabel>
-                <FiHeart
-                  fill={
-                    activeTab === "favoritos"
-                      ? colorPalette.blue[800]
-                      : colorPalette.blue[100]
-                  }
-                />
-                Favoritos
-              </TabItemLabel>
-            </TabItem>
-
-            <TabItem
-              active={activeTab === "todos"}
-              onClick={() => setActiveTab("todos")}
-              data-testid="tab-todos"
-            >
-              <TabItemLabel>
-                <FiList />
-                Todos
-              </TabItemLabel>
-            </TabItem>
-          </TabContent>
-        </ListTab>
-        <List
-          data={!!pokemons ? pokemons.results : []}
-          listItem={(row: FavoritesType, index) => ({
-            component: (
-              <ListContent {...row} index={index} setOpenModal={setOpenModal} />
-            ),
-          })}
-        />
-
-        {activeTab === "todos" && hasContentToLoad && (
-          <LoadContent>
-            <Button
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "8px",
-              }}
-              onClick={() => setPage((page) => page + 1)}
-            >
-              <FiArrowDown />
-              Carregar mais
-            </Button>
-          </LoadContent>
-        )}
-
-        {openModal.open && (
-          <ModalDialog
-            open={openModal.open}
-            title={
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "8px" }}
-              >
-                {openModal.title.toUpperCase()}
-                {openModal.values.fav && (
-                  <FiHeart
-                    color={colorPalette.blue[800]}
-                    fill={colorPalette.blue[800]}
-                  />
-                )}
+        {pokemons ? (
+          <>
+            <ListTab>
+              <div style={{ color: `${colorPalette.primary[300]}` }}>
+                {pokemons && pokemons.count} pokémons encontrados
               </div>
-            }
-            onClose={() => setOpenModal({ open: false, values: {}, title: "" })}
-          >
-            <div></div>
-          </ModalDialog>
-        )}
+              <TabContent>
+                <TabItem
+                  active={activeTab === "favoritos"}
+                  onClick={() => setActiveTab("favoritos")}
+                >
+                  <TabItemLabel>
+                    <FiHeart
+                      fill={
+                        activeTab === "favoritos"
+                          ? colorPalette.blue[800]
+                          : colorPalette.blue[100]
+                      }
+                    />
+                    Favoritos
+                  </TabItemLabel>
+                </TabItem>
+
+                <TabItem
+                  active={activeTab === "todos"}
+                  onClick={() => setActiveTab("todos")}
+                  data-testid="tab-todos"
+                >
+                  <TabItemLabel>
+                    <FiList />
+                    Todos
+                  </TabItemLabel>
+                </TabItem>
+              </TabContent>
+            </ListTab>
+            <List
+              data={!!pokemons ? pokemons.results : []}
+              listItem={(row: FavoritesType, index) => ({
+                component: (
+                  <ListContent
+                    {...row}
+                    index={index}
+                    setOpenModal={setOpenModal}
+                  />
+                ),
+              })}
+            />
+
+            {activeTab === "todos" && hasContentToLoad && (
+              <LoadContent>
+                <Button
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                  }}
+                  onClick={() => setPage((page) => page + 1)}
+                >
+                  <FiArrowDown />
+                  Carregar mais
+                </Button>
+              </LoadContent>
+            )}
+
+            {openModal.open && (
+              <ModalDialog
+                open={openModal.open}
+                title={
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                    }}
+                  >
+                    {openModal.title.toUpperCase()}
+                    {openModal.values.fav && (
+                      <FiHeart
+                        color={colorPalette.blue[800]}
+                        fill={colorPalette.blue[800]}
+                      />
+                    )}
+                  </div>
+                }
+                onClose={() =>
+                  setOpenModal({ open: false, values: {}, title: "" })
+                }
+              >
+                <div></div>
+              </ModalDialog>
+            )}
+          </>
+        ) : null}
       </Container>
     </>
   );
